@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/Mihir99-mk/logr/internal/source"
+	"github.com/OpenCortex-Labs/logr/internal/source"
 )
 
 const (

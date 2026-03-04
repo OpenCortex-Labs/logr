@@ -6,9 +6,9 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/Mihir99-mk/logr/internal/fanin"
-	"github.com/Mihir99-mk/logr/internal/filter"
-	"github.com/Mihir99-mk/logr/internal/source"
+	"github.com/OpenCortex-Labs/logr/internal/fanin"
+	"github.com/OpenCortex-Labs/logr/internal/filter"
+	"github.com/OpenCortex-Labs/logr/internal/source"
 )
 
 // Run starts the full-screen TUI. Blocks until user quits.

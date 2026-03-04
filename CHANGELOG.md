@@ -29,9 +29,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log filtering by level (`--level`), regex grep (`--grep`), time range (`--last`, `--since`).
 - Output formatters: `pretty` (default, colored), `json` (newline-delimited), `logfmt` (key=value), `table` (aligned).
 - TUI keybindings: `/` filter, `e` errors-only, `s` sidebar, `g`/`G` scroll, `?` help, `q` quit.
-- Embeddable structured logger package (`github.com/Mihir99-mk/logr/logr`) writing logfmt output.
-- Watch-mode integration helper (`github.com/Mihir99-mk/logr/run`) to co-launch app and TUI.
+- Embeddable structured logger package (`github.com/OpenCortex-Labs/logr/logr`) writing logfmt output.
+- Watch-mode integration helper (`github.com/OpenCortex-Labs/logr/run`) to co-launch app and TUI.
 - GitHub Actions CI: test (with race detector) and golangci-lint on every push and PR.
 
-[Unreleased]: https://github.com/Mihir99-mk/logr/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/Mihir99-mk/logr/releases/tag/v0.1.0
+[Unreleased]: https://github.com/OpenCortex-Labs/logr/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/OpenCortex-Labs/logr/releases/tag/v0.1.0

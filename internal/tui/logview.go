@@ -8,8 +8,8 @@ import (
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/Mihir99-mk/logr/internal/filter"
-	"github.com/Mihir99-mk/logr/internal/source"
+	"github.com/OpenCortex-Labs/logr/internal/filter"
+	"github.com/OpenCortex-Labs/logr/internal/source"
 )
 
 const maxLines = 5000

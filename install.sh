@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 # install.sh — Install logr binary from GitHub Releases
-# Usage: curl -sf https://raw.githubusercontent.com/Mihir99-mk/logr/main/install.sh | sh
+# Usage: curl -sf https://raw.githubusercontent.com/OpenCortex-Labs/logr/main/install.sh | sh
 
 set -e
 
-REPO="Mihir99-mk/logr"
+REPO="OpenCortex-Labs/logr"
 BINARY="logr"
 INSTALL_DIR="/usr/local/bin"
 

@@ -13,7 +13,7 @@ Thanks for your interest in contributing! logr is a terminal-native log intellig
 ### Setup
 
 ```bash
-git clone https://github.com/Mihir99-mk/logr.git
+git clone https://github.com/OpenCortex-Labs/logr.git
 cd logr
 go mod download
 go build ./...

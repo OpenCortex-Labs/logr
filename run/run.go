@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Mihir99-mk/logr/internal/cli"
-	"github.com/Mihir99-mk/logr/logr"
+	"github.com/OpenCortex-Labs/logr/internal/cli"
+	"github.com/OpenCortex-Labs/logr/logr"
 	"github.com/spf13/viper"
 )
 

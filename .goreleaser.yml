@@ -25,9 +25,9 @@ builds:
         goarch: arm64
     ldflags:
       - -s -w
-      - -X github.com/Mihir99-mk/logr/internal/cli.Version={{.Version}}
-      - -X github.com/Mihir99-mk/logr/internal/cli.Commit={{.Commit}}
-      - -X github.com/Mihir99-mk/logr/internal/cli.BuildDate={{.Date}}
+      - -X github.com/OpenCortex-Labs/logr/internal/cli.Version={{.Version}}
+      - -X github.com/OpenCortex-Labs/logr/internal/cli.Commit={{.Commit}}
+      - -X github.com/OpenCortex-Labs/logr/internal/cli.BuildDate={{.Date}}
 
 archives:
   - id: logr
@@ -88,7 +88,7 @@ brews:
       owner: Mihir99-mk
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-    homepage: "https://github.com/Mihir99-mk/logr"
+    homepage: "https://github.com/OpenCortex-Labs/logr"
     description: "Terminal-native log intelligence for developers."
     license: "MIT"
     test: |

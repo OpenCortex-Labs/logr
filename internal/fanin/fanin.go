@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/Mihir99-mk/logr/internal/source"
+	"github.com/OpenCortex-Labs/logr/internal/source"
 )
 
 // Merge streams all sources concurrently into a single LogEntry channel.

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Mihir99-mk/logr/internal/source"
+	"github.com/OpenCortex-Labs/logr/internal/source"
 )
 
 // Filter holds the current filtering criteria.

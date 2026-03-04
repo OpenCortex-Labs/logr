@@ -6,10 +6,10 @@ import (
 	"sort"
 	"text/tabwriter"
 
-	"github.com/Mihir99-mk/logr/internal/fanin"
-	"github.com/Mihir99-mk/logr/internal/source"
-	"github.com/Mihir99-mk/logr/internal/tui"
-	"github.com/Mihir99-mk/logr/pkg/output"
+	"github.com/OpenCortex-Labs/logr/internal/fanin"
+	"github.com/OpenCortex-Labs/logr/internal/source"
+	"github.com/OpenCortex-Labs/logr/internal/tui"
+	"github.com/OpenCortex-Labs/logr/pkg/output"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

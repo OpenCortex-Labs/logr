@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Mihir99-mk/logr/internal/filter"
-	"github.com/Mihir99-mk/logr/internal/source"
+	"github.com/OpenCortex-Labs/logr/internal/filter"
+	"github.com/OpenCortex-Labs/logr/internal/source"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

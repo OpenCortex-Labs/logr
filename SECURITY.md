@@ -19,7 +19,7 @@ If you discover a security vulnerability in `logr`, please report it responsibly
 
 Use GitHub's built-in private vulnerability reporting:
 
-1. Go to the [Security tab](https://github.com/Mihir99-mk/logr/security) of this repository.
+1. Go to the [Security tab](https://github.com/OpenCortex-Labs/logr/security) of this repository.
 2. Click **"Report a vulnerability"**.
 3. Fill in the details of the vulnerability.
 

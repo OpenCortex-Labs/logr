@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/Mihir99-mk/logr/internal/cli"
+	"github.com/OpenCortex-Labs/logr/internal/cli"
 )
 
 func main() {

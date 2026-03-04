@@ -1,4 +1,4 @@
-module github.com/Mihir99-mk/logr
+module github.com/OpenCortex-Labs/logr
 
 go 1.24.0
 

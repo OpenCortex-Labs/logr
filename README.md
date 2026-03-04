@@ -4,10 +4,10 @@ Terminal-native log intelligence for developers. Tail, filter, and visualize log
 
 > The observability tool for teams too small for Datadog and too serious for grep.
 
-[![CI](https://github.com/Mihir99-mk/logr/actions/workflows/ci.yml/badge.svg)](https://github.com/Mihir99-mk/logr/actions/workflows/ci.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Mihir99-mk/logr)](https://goreportcard.com/report/github.com/Mihir99-mk/logr)
-[![Go Reference](https://pkg.go.dev/badge/github.com/Mihir99-mk/logr.svg)](https://pkg.go.dev/github.com/Mihir99-mk/logr)
-[![GitHub Release](https://img.shields.io/github/v/release/Mihir99-mk/logr)](https://github.com/Mihir99-mk/logr/releases/latest)
+[![CI](https://github.com/OpenCortex-Labs/logr/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenCortex-Labs/logr/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/OpenCortex-Labs/logr)](https://goreportcard.com/report/github.com/OpenCortex-Labs/logr)
+[![Go Reference](https://pkg.go.dev/badge/github.com/OpenCortex-Labs/logr.svg)](https://pkg.go.dev/github.com/OpenCortex-Labs/logr)
+[![GitHub Release](https://img.shields.io/github/v/release/OpenCortex-Labs/logr)](https://github.com/OpenCortex-Labs/logr/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -19,13 +19,13 @@ Terminal-native log intelligence for developers. Tail, filter, and visualize log
 brew install Mihir99-mk/tap/logr
 
 # Go install
-go install github.com/Mihir99-mk/logr/cmd/logr@latest
+go install github.com/OpenCortex-Labs/logr/cmd/logr@latest
 
 # curl (Linux / macOS)
-curl -sf https://raw.githubusercontent.com/Mihir99-mk/logr/main/install.sh | sh
+curl -sf https://raw.githubusercontent.com/OpenCortex-Labs/logr/main/install.sh | sh
 ```
 
-Or grab a binary from the [Releases](https://github.com/Mihir99-mk/logr/releases) page.
+Or grab a binary from the [Releases](https://github.com/OpenCortex-Labs/logr/releases) page.
 
 ---
 
@@ -117,7 +117,7 @@ logr tail --docker --output table    # aligned table
 logr ships a structured logger you can embed in your Go app. Logs are written in logfmt so the logr CLI can parse and filter them.
 
 ```go
-import "github.com/Mihir99-mk/logr"
+import "github.com/OpenCortex-Labs/logr"
 
 logr.Info("server started")
 logr.Errorf("failed to connect: %v", err)
@@ -130,7 +130,7 @@ log.Info("request received")
 For watch-mode integration (auto-start TUI + app together):
 
 ```go
-import "github.com/Mihir99-mk/logr/run"
+import "github.com/OpenCortex-Labs/logr/run"
 
 func main() {
     run.New(api.Run).Start()
@@ -158,8 +158,8 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get
 | Code of Conduct | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
 | Security Policy | [SECURITY.md](SECURITY.md) |
 | Changelog | [CHANGELOG.md](CHANGELOG.md) |
-| Releases | [GitHub Releases](https://github.com/Mihir99-mk/logr/releases) |
-| Discussions | [GitHub Discussions](https://github.com/Mihir99-mk/logr/discussions) |
+| Releases | [GitHub Releases](https://github.com/OpenCortex-Labs/logr/releases) |
+| Discussions | [GitHub Discussions](https://github.com/OpenCortex-Labs/logr/discussions) |
 
 ---
 
