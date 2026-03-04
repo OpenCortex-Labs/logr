@@ -16,7 +16,7 @@ Terminal-native log intelligence for developers. Tail, filter, and visualize log
 
 ```bash
 # Homebrew
-brew install Mihir99-mk/tap/logr
+brew install OpenCortex-Labs/tap/logr
 
 # Go install
 go install github.com/OpenCortex-Labs/logr/cmd/logr@latest
