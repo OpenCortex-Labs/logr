@@ -1,0 +1,97 @@
+version: 2
+
+project_name: logr
+
+before:
+  hooks:
+    - go mod download
+    - go mod tidy
+
+builds:
+  - id: logr
+    main: ./cmd/logr
+    binary: logr
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X github.com/Mihir99-mk/logr/internal/cli.Version={{.Version}}
+      - -X github.com/Mihir99-mk/logr/internal/cli.Commit={{.Commit}}
+      - -X github.com/Mihir99-mk/logr/internal/cli.BuildDate={{.Date}}
+
+archives:
+  - id: logr
+    builds:
+      - logr
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    files:
+      - LICENSE
+      - README.md
+      - CHANGELOG.md
+
+checksum:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
+  algorithm: sha256
+
+changelog:
+  use: conventional-commits
+  sort: asc
+  groups:
+    - title: "New Features"
+      regexp: "^feat"
+      order: 0
+    - title: "Bug Fixes"
+      regexp: "^fix"
+      order: 1
+    - title: "Performance"
+      regexp: "^perf"
+      order: 2
+    - title: "Documentation"
+      regexp: "^docs"
+      order: 3
+    - title: "Other Changes"
+      order: 999
+  filters:
+    exclude:
+      - "^chore"
+      - "^test"
+      - "^ci"
+      - "merge conflict"
+      - "Merge pull request"
+      - "Merge branch"
+
+release:
+  github:
+    owner: Mihir99-mk
+    name: logr
+  draft: false
+  prerelease: auto
+  name_template: "v{{ .Version }}"
+
+brews:
+  - name: logr
+    repository:
+      owner: Mihir99-mk
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    homepage: "https://github.com/Mihir99-mk/logr"
+    description: "Terminal-native log intelligence for developers."
+    license: "MIT"
+    test: |
+      system "#{bin}/logr --version"
+    install: |
+      bin.install "logr"

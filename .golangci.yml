@@ -1,0 +1,64 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    # Correctness
+    - errcheck       # check for unhandled errors
+    - gosimple       # simplification suggestions
+    - govet          # go vet checks
+    - ineffassign    # detect unused assignments
+    - staticcheck    # staticcheck suite
+    - unused         # detect unused code
+
+    # Style
+    - gofmt          # formatting
+    - goimports      # import ordering
+    - misspell       # common spelling mistakes in comments/strings
+
+    # Safety
+    - gosec          # security-sensitive patterns
+    - noctx          # http requests without context
+    - bodyclose      # http response body close check
+
+    # Maintainability
+    - dupl           # code duplication
+    - gocritic       # opinionated style checks
+    - revive         # drop-in replacement for golint
+
+  settings:
+    govet:
+      enable-all: true
+      disable:
+        - shadow       # too noisy for typical Go code
+
+    gosec:
+      excludes:
+        - G304         # file path from variable (intentional in log sources)
+
+    revive:
+      rules:
+        - name: exported
+          disabled: false
+        - name: var-naming
+          disabled: false
+
+    dupl:
+      threshold: 150
+
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+      disabled-checks:
+        - hugeParam    # not relevant for this codebase size
+
+  exclusions:
+    rules:
+      - path: "_test.go"
+        linters:
+          - dupl
+          - gosec
+      - path: "cmd/"
+        linters:
+          - revive       # main packages don't need exported doc comments

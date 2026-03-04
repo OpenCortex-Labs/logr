@@ -1,0 +1,36 @@
+project_name: logr
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - env: [CGO_ENABLED=0]
+    goos: [linux, windows, darwin]
+    goarch: [amd64, arm64]
+    main: ./cmd/logr
+    ldflags:
+      - -s -w -X github.com/Mihir99-mk/logr/internal/cli.Version={{.Version}}
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude: ['^docs:', '^test:', '^chore:']
+
+brews:
+  - homepage: https://github.com/Mihir99-mk/logr
+    description: "Terminal-native log intelligence for developers"
+    license: MIT
+    repository:
+      owner: Mihir99-mk
+      name: homebrew-tap
