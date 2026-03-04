@@ -1,64 +1,62 @@
-version: "2"
-
 linters:
-  default: none
+  disable-all: true
   enable:
     # Correctness
-    - errcheck       # check for unhandled errors
-    - gosimple       # simplification suggestions
-    - govet          # go vet checks
-    - ineffassign    # detect unused assignments
-    - staticcheck    # staticcheck suite
-    - unused         # detect unused code
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
 
     # Style
-    - gofmt          # formatting
-    - goimports      # import ordering
-    - misspell       # common spelling mistakes in comments/strings
+    - gofmt
+    - goimports
+    - misspell
 
     # Safety
-    - gosec          # security-sensitive patterns
-    - noctx          # http requests without context
-    - bodyclose      # http response body close check
+    - gosec
+    - noctx
+    - bodyclose
 
     # Maintainability
-    - dupl           # code duplication
-    - gocritic       # opinionated style checks
-    - revive         # drop-in replacement for golint
+    - dupl
+    - gocritic
+    - revive
 
-  settings:
-    govet:
-      enable-all: true
-      disable:
-        - shadow       # too noisy for typical Go code
+linters-settings:
+  govet:
+    enable-all: true
+    disable:
+      - shadow
 
-    gosec:
-      excludes:
-        - G304         # file path from variable (intentional in log sources)
+  gosec:
+    excludes:
+      - G304
 
-    revive:
-      rules:
-        - name: exported
-          disabled: false
-        - name: var-naming
-          disabled: false
-
-    dupl:
-      threshold: 150
-
-    gocritic:
-      enabled-tags:
-        - diagnostic
-        - style
-      disabled-checks:
-        - hugeParam    # not relevant for this codebase size
-
-  exclusions:
+  revive:
     rules:
-      - path: "_test.go"
-        linters:
-          - dupl
-          - gosec
-      - path: "cmd/"
-        linters:
-          - revive       # main packages don't need exported doc comments
+      - name: exported
+        disabled: false
+      - name: var-naming
+        disabled: false
+
+  dupl:
+    threshold: 150
+
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - style
+    disabled-checks:
+      - hugeParam
+
+issues:
+  exclude-rules:
+    - path: "_test.go"
+      linters:
+        - dupl
+        - gosec
+    - path: "cmd/"
+      linters:
+        - revive
