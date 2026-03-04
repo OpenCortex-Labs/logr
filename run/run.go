@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/OpenCortex-Labs/logr/internal/cli"
-	"github.com/OpenCortex-Labs/logr/logr"
+	"github.com/OpenCortex-Labs/logr/logger"
 	"github.com/spf13/viper"
 )
 
@@ -117,9 +117,9 @@ func runWatchWithFile(ctx context.Context, args []string, logFilePath string, on
 	// Let the TUI open the file before we start writing to it.
 	time.Sleep(300 * time.Millisecond)
 
-	prev := logr.Default
-	logr.SetDefault(defaultLoggerFromConfig(logFilePath))
-	defer logr.SetDefault(prev)
+	prev := logger.Default
+	logger.SetDefault(defaultLoggerFromConfig(logFilePath))
+	defer logger.SetDefault(prev)
 
 	if onReady != nil {
 		onReady()
@@ -128,9 +128,9 @@ func runWatchWithFile(ctx context.Context, args []string, logFilePath string, on
 	return nil
 }
 
-func defaultLoggerFromConfig(watchLogFile string) *logr.Logger {
+func defaultLoggerFromConfig(watchLogFile string) *logger.Logger {
 	cli.InitConfig("")
-	var configs []logr.WriterConfig
+	var configs []logger.WriterConfig
 	if err := viper.UnmarshalKey("loggers", &configs); err == nil && len(configs) > 0 {
 		hasWatchFile := false
 		for _, c := range configs {
@@ -140,17 +140,17 @@ func defaultLoggerFromConfig(watchLogFile string) *logr.Logger {
 			}
 		}
 		if !hasWatchFile {
-			configs = append(configs, logr.WriterConfig{Type: "file", Path: watchLogFile})
+			configs = append(configs, logger.WriterConfig{Type: "file", Path: watchLogFile})
 		}
-		if l, err := logr.NewLoggerFromConfig(configs); err == nil {
+		if l, err := logger.NewLoggerFromConfig(configs); err == nil {
 			return l
 		}
 	}
 	f, err := os.OpenFile(watchLogFile, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
-		return logr.NewLogger(os.Stdout)
+		return logger.NewLogger(os.Stdout)
 	}
-	return logr.NewLogger(f)
+	return logger.NewLogger(f)
 }
 
 func ensureLogFile(path string) error {
