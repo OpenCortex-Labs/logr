@@ -28,15 +28,15 @@ need_cmd() {
 
 detect_os() {
   case "$(uname -s)" in
-    Linux*)  echo "Linux" ;;
-    Darwin*) echo "Darwin" ;;
+    Linux*)  echo "linux" ;;           # ← was Linux
+    Darwin*) echo "darwin" ;;          # ← was Darwin
     *)       err "Unsupported OS: $(uname -s)" ;;
   esac
 }
 
 detect_arch() {
   case "$(uname -m)" in
-    x86_64|amd64)   echo "x86_64" ;;
+    x86_64|amd64)   echo "amd64" ;;   # ← was x86_64
     arm64|aarch64)  echo "arm64" ;;
     *)              err "Unsupported architecture: $(uname -m)" ;;
   esac
