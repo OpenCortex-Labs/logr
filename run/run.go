@@ -52,13 +52,19 @@ func (a *App) OnReady(fn func()) *App {
 // Start runs the app. It sets up signal handling (Ctrl+C / SIGTERM),
 // wires the logr CLI, and blocks until the app exits.
 // Call this as the last line of main().
+
 func (a *App) Start() {
+	os.Exit(a.start())
+}
+
+func (a *App) start() int {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 	if err := a.run(ctx, os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
-		os.Exit(1)
+		return 1
 	}
+	return 0
 }
 
 // StartContext is like Start but uses the provided context.
@@ -80,7 +86,13 @@ func (a *App) run(ctx context.Context, args []string) error {
 		}
 		onReady := a.onReady
 		if onReady == nil && a.runFunc != nil {
-			onReady = func() { go a.runFunc(ctx) }
+			onReady = func() {
+				go func() {
+					if err := a.runFunc(ctx); err != nil {
+						fmt.Fprintf(os.Stderr, "logr: app error: %v\n", err)
+					}
+				}()
+			}
 		}
 		return runWatchWithFile(ctx, args, logFile, onReady)
 	}
@@ -113,7 +125,8 @@ func runWatchWithFile(ctx context.Context, args []string, logFilePath string, on
 		}
 		filtered = append(filtered, args[i])
 	}
-	watchArgs := append(filtered, "--file", logFilePath)
+	watchArgs := append([]string{}, filtered...)
+	watchArgs = append(watchArgs, "--file", logFilePath)
 
 	var wg sync.WaitGroup
 	wg.Add(1)

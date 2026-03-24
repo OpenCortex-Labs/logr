@@ -5,11 +5,11 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/OpenCortex-Labs/logr/internal/filter"
+	"github.com/OpenCortex-Labs/logr/internal/source"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/OpenCortex-Labs/logr/internal/filter"
-	"github.com/OpenCortex-Labs/logr/internal/source"
 )
 
 // ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -42,12 +42,12 @@ var levelOptions = []struct {
 }
 
 type sidebarModel struct {
-	sources             []sourceStats
-	visible             bool
-	width               int
-	height              int
-	selectedIndex       int // 0 = all, 1..n = sources (source section)
-	levelSelectedIndex  int // 0 = all, 1..4 = error,warn,info,debug (level section)
+	sources              []sourceStats
+	visible              bool
+	width                int
+	height               int
+	selectedIndex        int  // 0 = all, 1..n = sources (source section)
+	levelSelectedIndex   int  // 0 = all, 1..4 = error,warn,info,debug (level section)
 	sourceSectionFocused bool // true = SOURCES list focused, false = LEVEL list focused
 }
 
@@ -79,8 +79,8 @@ func (s *sidebarModel) SelectedSource() string {
 
 func (s *sidebarModel) MoveSelection(up bool) {
 	if s.sourceSectionFocused {
-		max := len(s.sources)
-		if max == 0 {
+		sourceCount := len(s.sources)
+		if sourceCount == 0 {
 			return
 		}
 		if up {
@@ -90,12 +90,12 @@ func (s *sidebarModel) MoveSelection(up bool) {
 			}
 		} else {
 			s.selectedIndex++
-			if s.selectedIndex > max {
-				s.selectedIndex = max
+			if s.selectedIndex > sourceCount {
+				s.selectedIndex = sourceCount
 			}
 		}
 	} else {
-		max := len(levelOptions) - 1
+		maxLevel := len(levelOptions) - 1
 		if up {
 			s.levelSelectedIndex--
 			if s.levelSelectedIndex < 0 {
@@ -103,8 +103,8 @@ func (s *sidebarModel) MoveSelection(up bool) {
 			}
 		} else {
 			s.levelSelectedIndex++
-			if s.levelSelectedIndex > max {
-				s.levelSelectedIndex = max
+			if s.levelSelectedIndex > maxLevel {
+				s.levelSelectedIndex = maxLevel
 			}
 		}
 	}
@@ -166,7 +166,7 @@ func (s sidebarModel) View() string {
 	}
 	var rows []string
 	// Sources — ▸ shows which list gets ↑↓
-	srcHdr := "Sources"
+	var srcHdr string
 	if s.sourceSectionFocused {
 		srcHdr = "▸ Sources"
 	} else {
@@ -198,7 +198,7 @@ func (s sidebarModel) View() string {
 		}
 	}
 	// Level — ▸ shows which list gets ↑↓; Enter applies both
-	levelHdr := "Level"
+	var levelHdr string
 	if !s.sourceSectionFocused {
 		levelHdr = "▸ Level"
 	} else {
@@ -273,9 +273,8 @@ func (m filterModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	}
 	var cmd tea.Cmd
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		switch msg.String() {
+	if keyMsg, ok := msg.(tea.KeyMsg); ok {
+		switch keyMsg.String() {
 		case "enter":
 			if v := m.input.Value(); v != "" {
 				if _, err := regexp.Compile(v); err != nil {

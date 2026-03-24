@@ -11,6 +11,10 @@ import (
 )
 
 func main() {
+	os.Exit(run())
+}
+
+func run() int {
 	ctx, stop := signal.NotifyContext(context.Background(),
 		os.Interrupt, syscall.SIGTERM,
 	)
@@ -18,6 +22,7 @@ func main() {
 
 	if err := cli.NewRootCmd().ExecuteContext(ctx); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
-		os.Exit(1)
+		return 1
 	}
+	return 0
 }

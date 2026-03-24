@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	"github.com/OpenCortex-Labs/logr/internal/fanin"
 	"github.com/OpenCortex-Labs/logr/internal/filter"
 	"github.com/OpenCortex-Labs/logr/internal/source"
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 // Run starts the full-screen TUI. Blocks until user quits.
@@ -249,7 +249,7 @@ func (m appModel) headerView() string {
 			Render(fmt.Sprintf("⏸ PAUSED  +%d buffered", m.logview.pausedCount))
 		status = status + "  " + badge
 	}
-	status = status + "  [? help]"
+	status += "  [? help]"
 	return lipgloss.NewStyle().
 		Background(lipgloss.Color("#5C5FE4")).
 		Foreground(lipgloss.Color("#FFFFFF")).

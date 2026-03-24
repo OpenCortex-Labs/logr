@@ -10,8 +10,8 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"github.com/fatih/color"
 	"github.com/OpenCortex-Labs/logr/internal/source"
+	"github.com/fatih/color"
 )
 
 const (
@@ -109,7 +109,10 @@ func (p *Printer) printPretty(e source.LogEntry) error {
 		msg = msg + " " + p.dimColor(extras)
 	}
 	_, err := fmt.Fprintf(p.writer, "%s [%s] %s %s\n", ts, svc, lvl, msg)
-	return err
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (p *Printer) printJSON(e source.LogEntry) error {
@@ -200,11 +203,11 @@ func isStandardField(k string) bool {
 	return false
 }
 
-func truncate(s string, max int) string {
-	if len(s) <= max {
+func truncate(s string, maxLevel int) string {
+	if len(s) <= maxLevel {
 		return s
 	}
-	return s[:max-1] + "…"
+	return s[:maxLevel-1] + "…"
 }
 
 func isTerminal(f *os.File) bool {

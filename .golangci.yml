@@ -1,5 +1,14 @@
+run:
+  timeout: 5m
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+
 linters:
-  disable-all: true
+  default: none
+
   enable:
     # Correctness
     - errcheck
@@ -10,53 +19,66 @@ linters:
     - unused
 
     # Style
-    - gofmt
-    - goimports
     - misspell
+    - godot
 
     # Safety
     - gosec
     - noctx
     - bodyclose
 
+    # Concurrency (important for logr — goroutines everywhere)
+    - contextcheck
+    - wrapcheck
+
     # Maintainability
     - dupl
     - gocritic
     - revive
+    - prealloc
+    - exhaustive
 
-linters-settings:
-  govet:
-    enable-all: true
-    disable:
-      - shadow
+  settings:
+    govet:
+      enable-all: true
+      disable:
+        - shadow
 
-  gosec:
-    excludes:
-      - G304
+    gosec:
+      excludes:
+        - G304
 
-  revive:
-    rules:
-      - name: exported
-        disabled: false
-      - name: var-naming
-        disabled: false
+    revive:
+      rules:
+        - name: exported
+          disabled: false
+        - name: var-naming
+          disabled: false
 
-  dupl:
-    threshold: 150
+    dupl:
+      threshold: 150
 
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - style
-    disabled-checks:
-      - hugeParam
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+      disabled-checks:
+        - hugeParam
+
+    wrapcheck:
+      ignore-sigs:
+        - .Errorf(
+        - errors.New(
 
 issues:
+  max-issues-per-linter: 50
+  max-same-issues: 3
   exclude-rules:
     - path: "_test.go"
       linters:
         - dupl
         - gosec
+        - wrapcheck
     - path: "cmd/"
       linters:
         - revive

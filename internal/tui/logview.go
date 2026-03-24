@@ -5,11 +5,11 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/OpenCortex-Labs/logr/internal/filter"
+	"github.com/OpenCortex-Labs/logr/internal/source"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/OpenCortex-Labs/logr/internal/filter"
-	"github.com/OpenCortex-Labs/logr/internal/source"
 )
 
 const maxLines = 5000
@@ -278,7 +278,7 @@ func (m *logviewModel) detailView() string {
 	}
 	sort.Strings(keys)
 
-	var rows []string
+	rows := make([]string, 0)
 	maxRows := detailPanelHeight - 3
 	if e.Message != "" && len(e.Fields) > 0 && len(rows) < maxRows {
 		rows = append(rows, fmt.Sprintf("  %s  %s",
@@ -347,15 +347,20 @@ func (m *logviewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		}
 
-	case tea.MouseMsg:
-		switch msg.Type {
-		case tea.MouseWheelUp:
-			m.atBottom = false
-		case tea.MouseWheelDown:
-			if m.viewport.AtBottom() {
-				m.atBottom = true
-			}
-		}
+		// case tea.MouseMsg:
+		// 	switch msg.Type {
+		// 	case tea.MouseWheelUp:
+		// 		m.atBottom = false
+		// 	case tea.MouseWheelDown:
+		// 		if m.viewport.AtBottom() {
+		// 			m.atBottom = true
+		// 		}
+		// 	case tea.MouseLeft, tea.MouseRight, tea.MouseMiddle,
+		// 		tea.MouseRelease, tea.MouseWheelLeft, tea.MouseWheelRight,
+		// 		tea.MouseBackward, tea.MouseForward,
+		// 		tea.MouseMotion, tea.MouseUnknown:
+		// 		// not handled — logview only cares about scroll wheel
+		// 	}
 	}
 
 	var cmd tea.Cmd
@@ -487,9 +492,9 @@ func renderLevel(level string) string {
 	}
 }
 
-func truncateTUI(s string, max int) string {
-	if len(s) <= max {
+func truncateTUI(s string, maxLevel int) string {
+	if len(s) <= maxLevel {
 		return s
 	}
-	return s[:max-1] + "…"
+	return s[:maxLevel-1] + "…"
 }

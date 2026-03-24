@@ -123,7 +123,7 @@ func (k *KubeSource) resolvePods(ctx context.Context) ([]corev1.Pod, error) {
 		return nil, fmt.Errorf("listing pods: %w", err)
 	}
 
-	var matching []corev1.Pod
+	matching := make([]corev1.Pod, 0, len(list.Items))
 	for _, pod := range list.Items {
 		if pod.Status.Phase != corev1.PodRunning {
 			continue

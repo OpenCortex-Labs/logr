@@ -12,7 +12,7 @@ const (
 	LevelError = "error"
 )
 
-// LogEntry is the normalized log line from any source
+// LogEntry is the normalized log line from any source.
 type LogEntry struct {
 	Timestamp time.Time
 	Service   string
@@ -22,7 +22,7 @@ type LogEntry struct {
 	Raw       string
 }
 
-// Source is implemented by docker, k8s, file, stdin
+// Source is implemented by docker, k8s, file, stdin.
 type Source interface {
 	Name() string
 	Stream(ctx context.Context) (<-chan LogEntry, error)

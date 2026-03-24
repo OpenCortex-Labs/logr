@@ -222,9 +222,13 @@ func (l *Logger) emit(level, msg string) {
 	}
 	line += "\n"
 	for _, w := range l.writers {
-		w.Write([]byte(line))
+		if _, err := w.Write([]byte(line)); err != nil {
+			fmt.Fprintf(os.Stderr, "logr: write error: %v\n", err)
+		}
 		if f, ok := w.(*os.File); ok {
-			f.Sync()
+			if err := f.Sync(); err != nil {
+				fmt.Fprintf(os.Stderr, "logr: sync error: %v\n", err)
+			}
 		}
 	}
 }

@@ -34,7 +34,9 @@ func NewRootCmd() *cobra.Command {
 	root.PersistentFlags().StringSlice("field", nil, "filter by structured field key=value (repeatable)")
 	root.PersistentFlags().Int("sample", 1, "emit every Nth matching entry (1 = all)")
 
-	viper.BindPFlags(root.PersistentFlags())
+	if err := viper.BindPFlags(root.PersistentFlags()); err != nil {
+		fmt.Fprintf(os.Stderr, "logr: failed to bind flags: %v\n", err)
+	}
 	cobra.OnInitialize(initConfig)
 
 	root.AddCommand(
@@ -64,7 +66,11 @@ func InitConfig(configPath string) {
 		viper.SetConfigType("yaml")
 	}
 	viper.AutomaticEnv()
-	viper.ReadInConfig()
+	if err := viper.ReadInConfig(); err != nil {
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "logr: config error: %v\n", err)
+		}
+	}
 }
 
 // ── Source flags ──────────────────────────────────────────────────────────────

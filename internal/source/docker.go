@@ -10,7 +10,6 @@ import (
 
 	"io"
 
-	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/events"
 	"github.com/docker/docker/api/types/filters"
@@ -35,7 +34,7 @@ func NewDockerSource(services []string) (*DockerSource, error) {
 		client.WithAPIVersionNegotiation(),
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create docker client: %w", err)
 	}
 	return &DockerSource{
 		client:   cli,
@@ -85,19 +84,28 @@ func (d *DockerSource) Close() error {
 		d.cancel()
 	}
 	d.wg.Wait()
-	return d.client.Close()
+	if err := d.client.Close(); err != nil {
+		return fmt.Errorf("failed to close docker client: %w", err)
+	}
+	return nil
 }
 
-func (d *DockerSource) resolveContainers(ctx context.Context) ([]types.Container, error) {
+func (d *DockerSource) resolveContainers(ctx context.Context) ([]container.Summary, error) {
 	f := filters.NewArgs()
 	f.Add("status", "running")
 	for _, svc := range d.services {
 		f.Add("label", "com.docker.compose.service="+svc)
 	}
-	return d.client.ContainerList(ctx, container.ListOptions{Filters: f})
+	cont := make([]container.Summary, 0)
+	cont, err := d.client.ContainerList(ctx, container.ListOptions{Filters: f})
+	if err != nil {
+		return nil, err
+	}
+
+	return cont, nil
 }
 
-func (d *DockerSource) tailContainer(ctx context.Context, c types.Container) {
+func (d *DockerSource) tailContainer(ctx context.Context, c container.Summary) {
 	defer d.wg.Done()
 	serviceName := containerServiceName(c)
 
@@ -191,7 +199,7 @@ func (d *DockerSource) tailContainerByID(ctx context.Context, event events.Messa
 	}
 }
 
-func (d *DockerSource) matchesFilter(c types.Container) bool {
+func (d *DockerSource) matchesFilter(c container.Summary) bool {
 	if len(d.services) == 0 {
 		return true
 	}
@@ -204,7 +212,7 @@ func (d *DockerSource) matchesFilter(c types.Container) bool {
 	return false
 }
 
-func containerServiceName(c types.Container) string {
+func containerServiceName(c container.Summary) string {
 	if svc, ok := c.Labels["com.docker.compose.service"]; ok {
 		return svc
 	}

@@ -26,7 +26,7 @@ func newWatchCmd() *cobra.Command {
   logr watch --kube --namespace production --label app=api
   logr watch --file ./logs/*.log
   kubectl logs -f pod/api-xyz | logr watch`,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			sources, err := resolveSources(&sf)
 			if err != nil {
 				return err
@@ -53,7 +53,7 @@ func newTailCmd() *cobra.Command {
 		Example: `  logr tail --docker --level error
   logr tail --file app.log --grep "user_id=42"
   logr tail --kube --namespace prod | jq '.message'`,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			sources, err := resolveSources(&sf)
 			if err != nil {
 				return err
@@ -89,7 +89,7 @@ func newQueryCmd() *cobra.Command {
 		Short: "Search historical logs",
 		Example: `  logr query --file app.log --last 1h --level error
   logr query --docker --grep "panic" --output table`,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			sources, err := resolveSources(&sf)
 			if err != nil {
 				return err
@@ -130,7 +130,7 @@ func newStatsCmd() *cobra.Command {
 		Short: "Show error rate summary across services",
 		Example: `  logr stats --docker --last 1h
   logr stats --kube --namespace prod --last 30m`,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			sources, err := resolveSources(&sf)
 			if err != nil {
 				return err
@@ -207,7 +207,7 @@ func newConfigCmd() *cobra.Command {
 		&cobra.Command{
 			Use:   "show",
 			Short: "Show current config",
-			Run: func(cmd *cobra.Command, args []string) {
+			Run: func(_ *cobra.Command, _ []string) {
 				fmt.Printf("Config file: %s\n\n", viper.ConfigFileUsed())
 				for k, v := range viper.AllSettings() {
 					fmt.Printf("  %s: %v\n", k, v)
@@ -218,7 +218,7 @@ func newConfigCmd() *cobra.Command {
 			Use:   "set [key] [value]",
 			Short: "Set a config value",
 			Args:  cobra.ExactArgs(2),
-			RunE: func(cmd *cobra.Command, args []string) error {
+			RunE: func(_ *cobra.Command, args []string) error {
 				viper.Set(args[0], args[1])
 				return viper.WriteConfig()
 			},
@@ -240,7 +240,7 @@ func newVersionCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "version",
 		Short: "Print version",
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			fmt.Printf("logr %s (commit %s, built %s)\n", Version, Commit, BuildDate)
 		},
 	}
