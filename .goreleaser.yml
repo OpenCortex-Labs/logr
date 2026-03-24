@@ -2,14 +2,18 @@ version: 2
 
 project_name: logr
 
+# ── Before hooks ──────────────────────────────────────────────────────────────
+
 before:
   hooks:
     - go mod download
     - go mod tidy
 
+# ── Builds ────────────────────────────────────────────────────────────────────
+
 builds:
   - id: logr
-    main: ./cmd/logr
+    main: .
     binary: logr
     env:
       - CGO_ENABLED=0
@@ -25,13 +29,15 @@ builds:
         goarch: arm64
     ldflags:
       - -s -w
-      - -X github.com/OpenCortex-Labs/logr/internal/cli.Version={{.Version}}
-      - -X github.com/OpenCortex-Labs/logr/internal/cli.Commit={{.Commit}}
-      - -X github.com/OpenCortex-Labs/logr/internal/cli.BuildDate={{.Date}}
+      - -X main.Version={{.Version}}
+      - -X main.Commit={{.Commit}}
+      - -X main.BuildDate={{.Date}}
+
+# ── Archives ──────────────────────────────────────────────────────────────────
 
 archives:
   - id: logr
-    builds:
+    ids:
       - logr
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
@@ -43,27 +49,33 @@ archives:
       - README.md
       - CHANGELOG.md
 
+# ── Checksum ──────────────────────────────────────────────────────────────────
+
 checksum:
   name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
   algorithm: sha256
 
+# ── Changelog ─────────────────────────────────────────────────────────────────
+# Note: conventional-commits requires GoReleaser Pro.
+# Using free-tier compatible changelog with regexp groups instead.
+
 changelog:
-  use: conventional-commits
   sort: asc
+  abbrev: -1
   groups:
-    - title: "New Features"
+    - title: "✨ New Features"
       regexp: "^feat"
       order: 0
-    - title: "Bug Fixes"
+    - title: "🐛 Bug Fixes"
       regexp: "^fix"
       order: 1
-    - title: "Performance"
+    - title: "⚡ Performance"
       regexp: "^perf"
       order: 2
-    - title: "Documentation"
+    - title: "📝 Documentation"
       regexp: "^docs"
       order: 3
-    - title: "Other Changes"
+    - title: "🔄 Other Changes"
       order: 999
   filters:
     exclude:
@@ -74,6 +86,8 @@ changelog:
       - "Merge pull request"
       - "Merge branch"
 
+# ── Release ───────────────────────────────────────────────────────────────────
+
 release:
   github:
     owner: Mihir99-mk
@@ -81,8 +95,25 @@ release:
   draft: false
   prerelease: auto
   name_template: "v{{ .Version }}"
+  footer: |
+    ## Install
 
-brews:
+    ```bash
+    # Homebrew
+    brew install Mihir99-mk/tap/logr
+
+    # Go install
+    go install github.com/OpenCortex-Labs/logr@latest
+
+    # curl (Linux / macOS)
+    curl -sf https://raw.githubusercontent.com/OpenCortex-Labs/logr/main/install.sh | sh
+    ```
+
+    **Full Changelog**: https://github.com/OpenCortex-Labs/logr/blob/main/CHANGELOG.md
+
+# ── Homebrew ──────────────────────────────────────────────────────────────────
+
+homebrew_casks:
   - name: logr
     repository:
       owner: Mihir99-mk
@@ -91,7 +122,3 @@ brews:
     homepage: "https://github.com/OpenCortex-Labs/logr"
     description: "Terminal-native log intelligence for developers."
     license: "MIT"
-    test: |
-      system "#{bin}/logr --version"
-    install: |
-      bin.install "logr"
