@@ -17,12 +17,6 @@ import (
 
 const defaultWatchLogFile = "./logs/app.log"
 
-// App is the logr runner. Build it with New(), configure with chained methods, then call .Start().
-//
-//	run.New(myApp.Run).
-//	    LogFile("./logs/api.log").
-//	    OnReady(func() { fmt.Println("ready!") }).
-//	    Start()
 type App struct {
 	runFunc      func(ctx context.Context) error
 	watchLogFile string

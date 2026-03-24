@@ -67,9 +67,7 @@ func InitConfig(configPath string) {
 	}
 	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "logr: config error: %v\n", err)
-		}
+		fmt.Fprintf(os.Stderr, "logr: config error: %v\n", err)
 	}
 }
 

@@ -59,10 +59,7 @@ func enrichEntry(entry LogEntry, line string) LogEntry {
 // follows a valid timestamp rather than assuming a fixed offset.
 func parseTimestampPrefix(raw string) (time.Time, string) {
 	// Timestamps are at least 20 chars; scan for a space delimiter up to 36 chars in.
-	end := len(raw)
-	if end > 36 {
-		end = 36
-	}
+	end := min(len(raw), 36)
 	for i := 20; i <= end; i++ {
 		if i >= len(raw) {
 			break

@@ -68,7 +68,7 @@ func (m appModel) pollEntries() tea.Cmd {
 	return func() tea.Msg {
 		var batch []source.LogEntry
 		// Drain up to 200 entries non-blocking first.
-		for i := 0; i < 200; i++ {
+		for range 200 {
 			select {
 			case e, ok := <-m.entries:
 				if !ok {
@@ -209,10 +209,7 @@ func (m *appModel) relayout() {
 	if m.sidebar.visible {
 		sidebarWidth = 20 // fixed sidebar width including its right border
 	}
-	logviewWidth := m.width - sidebarWidth
-	if logviewWidth < 1 {
-		logviewWidth = 1
-	}
+	logviewWidth := max(m.width-sidebarWidth, 1)
 	m.sidebar.SetSize(sidebarWidth, m.height-3)
 	m.logview.SetSize(logviewWidth, m.height-3)
 }
@@ -275,10 +272,7 @@ func (m appModel) statusBarView() string {
 		hint = "⏸ pause  " + hint
 	}
 	// Single line: truncate if too long so status bar doesn't wrap into duplicate-looking lines
-	maxLen := m.width - 2
-	if maxLen < 40 {
-		maxLen = 40
-	}
+	maxLen := max(m.width-2, 40)
 	if len(hint) > maxLen {
 		hint = hint[:maxLen-3] + "..."
 	}
