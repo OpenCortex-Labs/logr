@@ -103,7 +103,17 @@ func runWatchWithFile(ctx context.Context, args []string, logFilePath string, on
 		return fmt.Errorf("ensure log file: %w", err)
 	}
 
-	watchArgs := append(append([]string{}, args...), "--file", logFilePath)
+	// Strip any existing --file flag from args before appending ours,
+	// so a caller who already passed --file doesn't produce duplicate flags.
+	filtered := make([]string, 0, len(args))
+	for i := 0; i < len(args); i++ {
+		if args[i] == "--file" || args[i] == "-f" {
+			i++ // skip the value too
+			continue
+		}
+		filtered = append(filtered, args[i])
+	}
+	watchArgs := append(filtered, "--file", logFilePath)
 
 	var wg sync.WaitGroup
 	wg.Add(1)

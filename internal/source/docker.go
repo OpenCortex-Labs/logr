@@ -59,6 +59,9 @@ func (d *DockerSource) Stream(ctx context.Context) (<-chan LogEntry, error) {
 	}
 
 	for _, c := range containers {
+		d.mu.Lock()
+		d.tailing[c.ID] = true
+		d.mu.Unlock()
 		d.wg.Add(1)
 		go d.tailContainer(ctx, c)
 	}

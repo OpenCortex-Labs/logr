@@ -198,6 +198,9 @@ func (m *logviewModel) addEntryInternal(e source.LogEntry) {
 			m.filtered = append(m.filtered, old)
 			m.rendered = append(m.rendered, m.renderEntry(old))
 		}
+		if m.cursor >= len(m.rendered) {
+			m.cursor = len(m.rendered) - 1
+		}
 	}
 	m.allEntries = append(m.allEntries, e)
 	m.filtered = append(m.filtered, e)

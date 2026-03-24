@@ -53,10 +53,24 @@ func enrichEntry(entry LogEntry, line string) LogEntry {
 // parseTimestampPrefix strips a leading RFC3339Nano timestamp from a log line.
 // Returns the parsed time and the remaining line content.
 // Used by Docker and Kubernetes sources which prepend timestamps.
+//
+// RFC3339Nano timestamps vary in length (e.g. "2024-01-01T00:00:00Z" is 20 chars,
+// nanosecond variants can be up to 35 chars). We scan for the first space that
+// follows a valid timestamp rather than assuming a fixed offset.
 func parseTimestampPrefix(raw string) (time.Time, string) {
-	if len(raw) > 31 && raw[30] == ' ' {
-		if t, err := time.Parse(time.RFC3339Nano, raw[:30]); err == nil {
-			return t, raw[31:]
+	// Timestamps are at least 20 chars; scan for a space delimiter up to 36 chars in.
+	end := len(raw)
+	if end > 36 {
+		end = 36
+	}
+	for i := 20; i <= end; i++ {
+		if i >= len(raw) {
+			break
+		}
+		if raw[i] == ' ' {
+			if t, err := time.Parse(time.RFC3339Nano, raw[:i]); err == nil {
+				return t, raw[i+1:]
+			}
 		}
 	}
 	return time.Now(), raw

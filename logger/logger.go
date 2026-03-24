@@ -211,14 +211,12 @@ func (l *Logger) emit(level, msg string) {
 	if l == nil || len(l.writers) == 0 {
 		return
 	}
-	msg = strings.ReplaceAll(msg, `"`, `\"`)
 	line := fmt.Sprintf("level=%s msg=%q ts=%s", level, msg, time.Now().UTC().Format(time.RFC3339Nano))
 	for i := 0; i < len(l.fields); i += 2 {
 		if i+1 >= len(l.fields) {
 			break
 		}
 		k, v := l.fields[i], l.fields[i+1]
-		v = strings.ReplaceAll(v, `"`, `\"`)
 		v = strings.ReplaceAll(v, "\n", " ")
 		line += fmt.Sprintf(" %s=%q", k, v)
 	}

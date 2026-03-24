@@ -295,7 +295,6 @@ func (m appModel) helpView() string {
   esc      close filter bar / close detail
   e        toggle errors-only mode
   s        toggle sidebar
-  s        toggle sidebar
   1 / 2    in sidebar: Sources (1) or Level (2) — only way to switch
   tab      in sidebar: back to logs
   ↑↓ / jk  in sidebar: move (▸ = active list); in logs: scroll

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/OpenCortex-Labs/logr/internal/source"
@@ -30,7 +31,7 @@ type Filter struct {
 	// Sample, when > 1, passes only every Nth matching entry.
 	// The counter is internal — callers use Match() normally.
 	Sample      int
-	sampleCount int
+	sampleCount atomic.Int64
 }
 
 // Match returns true if the entry passes all active filters.
@@ -74,8 +75,8 @@ func (f *Filter) Match(e source.LogEntry) bool {
 	}
 	// Sampling: advance counter; emit only every Nth match.
 	if f.Sample > 1 {
-		f.sampleCount++
-		if f.sampleCount%f.Sample != 0 {
+		n := f.sampleCount.Add(1)
+		if n%int64(f.Sample) != 0 {
 			return false
 		}
 	}

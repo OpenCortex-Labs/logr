@@ -17,7 +17,7 @@ import (
 var (
 	sidebarBorder    = lipgloss.NewStyle().Border(lipgloss.NormalBorder(), false, true, false, false).BorderForeground(lipgloss.Color("#333333"))
 	activeSrcStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("#50FA7B")).Bold(true)
-	inactiveSrc     = lipgloss.NewStyle().Foreground(lipgloss.Color("#555555"))
+	inactiveSrcStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#555555"))
 	sidebarHdr       = lipgloss.NewStyle().Foreground(lipgloss.Color("#AAAAAA")).Bold(true).MarginBottom(1)
 	sidebarSelected  = lipgloss.NewStyle().Background(lipgloss.Color("#3D3D5C")).Foreground(lipgloss.Color("#FFFFFF")).Padding(0, 1)
 )
@@ -184,7 +184,7 @@ func (s sidebarModel) View() string {
 		idx := i + 1
 		dot, style := "●", activeSrcStyle
 		if !src.active {
-			dot, style = "○", inactiveSrc
+			dot, style = "○", inactiveSrcStyle
 		}
 		label := fmt.Sprintf("%s %s %d", dot, truncateTUI(src.name, s.width-8), src.total)
 		if src.errors > 0 {
