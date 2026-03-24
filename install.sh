@@ -48,7 +48,16 @@ detect_arch() {
 
 latest_tag() {
   need_cmd curl
-  curl -sf "https://api.github.com/repos/${REPO}/releases/latest" \
+
+  response=$(curl -sf "https://api.github.com/repos/${REPO}/releases/latest")
+
+  # GitHub returns {"message":"Not Found"} when no releases exist
+  if echo "$response" | grep -q '"message"'; then
+    err "No releases found for ${REPO}. Set LOGR_VERSION to install a specific version:
+    LOGR_VERSION=v0.1.0 curl -sf https://raw.githubusercontent.com/${REPO}/main/install.sh | sh"
+  fi
+
+  echo "$response" \
     | grep '"tag_name"' \
     | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/'
 }
